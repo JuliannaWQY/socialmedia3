@@ -1,6 +1,6 @@
-#Social media analysis basic
+# Social media analysis basic
 
-###Assignment 3 - data visualization for HK 2018 LegCo By-election results (map and bar chart)
+### Assignment 3 - data visualization for HK 2018 LegCo By-election results (map and bar chart)
 
 by Julianna Wu
 
