@@ -192,48 +192,22 @@ p1
 ggmap(get_map('K'))
 
 #to build a bar chart for the three districts
-total <- data.frame(1:nrow(HKIsland))
-for (it in 1:nrow(HKIsland)){
-  total$party[it]=HKIsland$party[it]
-  total$votes[it]=max(HKIsland$Candidate1[it],HKIsland$Candidate4[it])
-  total$district="HKIsland"
-}
+total_votes_pan<-c(sum(HKIsland$Candidate1),sum(KW$Candidate1),sum(NT$Candidate6))
+total_votes_pro<-c(sum(HKIsland$Candidate4),sum(KW$Candidate2),sum(NT$Candidate4))
+district<-c("HKIsland","Kowloon West","New Territory East")
 
-total_1 <-data.frame(1:nrow(KW))
-for (it in 1:nrow(KW)){
-  total_1$party[it]=KW$party[it]
-  total_1$votes[it]=max(KW$Candidate1[it],KW$Candidate2[it])
-  total_1$district="Kowloon West"
-}
-
-total_2 <-data.frame(1:nrow(NT))
-for (it in 1:nrow(NT)){
-  total_2$party[it]=NT$party[it]
-  total_2$votes[it]=max(NT$Candidate2[it],NT$Candidate4[it],NT$Candidate6[it])
-  total_2$district="New Territory East"
-}
-
-names(total)<-c("id","party","votes","district")
-names(total_1)<-c("id","party","votes","district")
-names(total_2)<-c("id","party","votes","district")
-all <- rbind(total,total_1,total_2)
-
-pan<-subset(all,party=="Pan-democrat",select= -id)
-pro<-subset(all,party=="Pro-establishment",select= -id)
+pan<-data.frame(district,total_votes_pan)
+pro<-data.frame(district,total_votes_pro)
 
 library(plotly)
 Sys.setenv("plotly_username"="JuliannaWQY")
-Sys.setenv("plotly_api_key"="")
+Sys.setenv("plotly_api_key"="zaEo3WhZ1ZuGVdGDxuy6")
 
-p3 <- plot_ly(pan, x = ~district, y = ~votes, type = 'bar', name = 'Votes') %>%
-  layout(yaxis = list(title = 'Count'), barmode = 'group')
+p3 <- plot_ly(x = pan$district, y = pan$total_votes_pan, name = "Pan-democrats", type = 'bar', name = 'Votes')
+p3 <- add_trace(p3, y = pro$total_votes_pro, name = "Pro-establishment")
+layout(p3, title = "", xaxis = list(title = "District"), yaxis = list (title = "Total votes"))
 p3
-api_create(p3, filename = "assign_pan")
-
-p4 <- plot_ly(pro, x = ~district, y = ~votes, type = 'bar', name = 'Votes') %>%
-  layout(yaxis = list(title = 'Count'), barmode = 'group')
-p4
-api_create(p4, filename = "assign_pro")
+api_create(p3, filename = "assign3_final")
 
 #_______________________________________________________________________________
 
